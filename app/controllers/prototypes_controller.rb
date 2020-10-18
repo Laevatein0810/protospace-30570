@@ -1,6 +1,14 @@
 class PrototypesController < ApplicationController
+before_action :authenticate_user!, expect: [:index, :show]
+
   def index
-    @prototype = Prototype.all
+    @prototypes = Prototype.all
+  end
+
+  def show
+    @prototype = Prototype.find(params[:id])
+    @comment = Comment.new
+    @comments = @prototype.comments
   end
 
   def destroy
@@ -11,6 +19,9 @@ class PrototypesController < ApplicationController
 
   def edit
     @prototype = Prototype.find(params[:id])
+    unless current_user == @prototype.user
+      redirect_to root_path
+    end
   end
 
   def update
@@ -20,10 +31,6 @@ class PrototypesController < ApplicationController
     else
       render :edit
     end
-  end
-
-  def show
-    @prototype = Prototype.find(params[:id])
   end
 
   def new
