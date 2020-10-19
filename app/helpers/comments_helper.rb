@@ -1,2 +1,2 @@
-module CommnetsHelper
+module CommentsHelper
 end
